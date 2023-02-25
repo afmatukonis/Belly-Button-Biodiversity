@@ -1,0 +1,14 @@
+#body{
+    background-color:turquoise;
+
+}
+
+#my-header{
+    color:black;
+    font-weight: bold;
+    font-style: oblique;
+}
+
+#tronic{
+    display: none;
+}
