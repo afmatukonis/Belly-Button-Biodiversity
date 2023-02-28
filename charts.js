@@ -1,11 +1,9 @@
 function init() {
-  // Grab a reference to the dropdown select element
   var selector = d3.select("#selDataset");
 
-  // Use the list of sample names to populate the select options
   d3.json("samples.json").then((data) => {
+    console.log(data);
     var sampleNames = data.names;
-
     sampleNames.forEach((sample) => {
       selector
         .append("option")
@@ -13,11 +11,10 @@ function init() {
         .property("value", sample);
     });
 
-    // Use the first sample from the list to build the initial plots
-    var firstSample = sampleNames[0];
-    buildCharts(firstSample);
-    buildMetadata(firstSample);
-  });
+  var firstSample = sampleNames[0];
+  buildCharts(firstSample);
+  buildMetadata(firstSample);
+});
 }
 
 // Initialize the dashboard
@@ -57,8 +54,7 @@ function buildMetadata(sample) {
 // Deliverable 1: 1. Create the buildChart function.
 function buildCharts(sample) {
   // Deliverable 1: 2. Use d3.json to load the samples.json file 
-  d3.json("samples.json").then((data) => {
-    console.log(data);
+  d3.json("samples.json").then(data => {console.log(data);
 
     // Deliverable 1: 3. Create a variable that holds the samples array. 
 var samples = data.samples;
@@ -83,11 +79,11 @@ var washingFreq = parseFloat(indexzeroMetadata.wfreq);
     // so the otu_ids with the most bacteria are last. 
     var yticks = []
     Object.entries(indexzeroSample.otu_ids.slice(0,10)).reverse().forEach(([key, value]) => {
-      yticks.push('OUT ${value}');
+      yticks.push(`OUT ${value}`);
     });
 
     // Deliverable 1: 8. Create the trace for the bar chart. 
-    var trace = [{x:sample_values.slice(o,10).reverse(),
+    var barData= [{x:sample_values.slice(0,10).reverse(),
                 y:yticks,
               text:otu_labels.slice(0,10).reverse(),
             type:'bar',
@@ -102,7 +98,7 @@ var washingFreq = parseFloat(indexzeroMetadata.wfreq);
     };
 
     // Deliverable 1: 10. Use Plotly to plot the data with the layout. 
-Plotly.newPlot("bar", trace, barLayout);
+Plotly.newPlot("bar", barData, barLayout);
     // Deliverable 2: 1. Create the trace for the bubble chart.
 bubbletrace = [{
   x:otu_ids,
@@ -124,6 +120,7 @@ bubbleLayout = {
     // Deliverable 3: 4. Create the trace for the gauge chart.
     var gaugetrace = [{
       domain: { x: [0, 1], y: [0, 1]},
+      value: washingFreq,
       title: {text: "Scrubs Per Week"},
       type: "indicator",
       mode: "gauge+number",
@@ -134,7 +131,7 @@ bubbleLayout = {
           {range: [0,2], color:"red"},
           {range: [2,4], color:"orange"},
           {range: [4,6], color:"yellow"},
-          {range: [6,8], color:"limegreen"},
+          {range: [6,8], color:"blue"},
           {range:[8,10], color:"green"}
         ]
       }
@@ -151,3 +148,4 @@ var gaugeLayout = {title:{text:"Belly Button Washing Frequency",
 Plotly.newPlot("gauge", gaugetrace, gaugeLayout);
   });
 }
+
